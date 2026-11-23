@@ -753,46 +753,88 @@ impl TerminalEngine {
             self.input_len = 0;
             return;
         } else if cmd == "wifi scan" {
-            self.add_line("Scanning 2.4GHz and 5GHz 802.11 channels...", 0x0094A3B8);
-            self.add_line("[1] Vyshnavi_iPhone_5G   -42dBm (98% Signal) WPA2-PSK [HOTSPOT]", 0x002DD4BF);
-            self.add_line("[2] Galaxy_Hotspot_Fast  -55dBm (88% Signal) WPA2-PSK [HOTSPOT]", 0x00FFFFFF);
-            self.add_line("[3] JAIN_FET_Campus_WiFi -48dBm (92% Signal) 802.1X Enterprise", 0x00FFFFFF);
-            self.add_line("[4] Home_Fiber_5GHz      -62dBm (78% Signal) WPA3-Personal", 0x00FFFFFF);
-            self.add_line("Hint: Type 'wifi connect' to connect to your mobile hotspot!", 0x00FCD34D);
+            self.add_line("Scanning 2.4GHz & 5GHz 802.11ax channels (Intel AX203)...", 0x0094A3B8);
+            self.add_line("[1] Jain_Student          -38dBm (99% Signal) 802.1X [CONNECTED]", 0x0034D399);
+            self.add_line("[2] Vyshuuu               -42dBm (98% Signal) WPA3-Personal [HOTSPOT]", 0x002DD4BF);
+            self.add_line("[3] FET - Students        -45dBm (95% Signal) 802.1X Enterprise", 0x00FFFFFF);
+            self.add_line("[4] Sammi's iPhone        -52dBm (90% Signal) WPA2-PSK [HOTSPOT]", 0x00FFFFFF);
+            self.add_line("[5] Galaxy A15 5G 661F    -58dBm (85% Signal) WPA2-PSK [HOTSPOT]", 0x00FFFFFF);
+            self.add_line("Hint: Type 'wifi connect' or 'wifi connect 2' to switch network!", 0x00FCD34D);
         } else if cmd == "wifi connect" || cmd.starts_with("wifi connect") {
-            state.wifi_connected = true;
-            state.wifi_hotspot_id = 1;
-            self.add_line("[*] Connecting to 'Vyshnavi_iPhone_5G' Mobile Hotspot...", 0x0038BDF8);
-            self.add_line("[+] WPA2-PSK 4-Way Handshake: PMK Verified!", 0x0034D399);
-            self.add_line("[+] DHCP Lease: IP 192.168.43.105 | Mask 255.255.255.0", 0x0034D399);
-            self.add_line("[+] Gateway Router: 192.168.43.1 | DNS: 8.8.8.8, 1.1.1.1", 0x0034D399);
-            self.add_line("[OK] SUCCESS: Connected! Internet Online at 150 Mbps link.", 0x002DD4BF);
+            let choice = if cmd.ends_with("2") || cmd.contains("vyshu") {
+                state.wifi_connected = true;
+                state.wifi_hotspot_id = 2;
+                2
+            } else if cmd.ends_with("3") || cmd.contains("fet") {
+                state.wifi_connected = true;
+                state.wifi_hotspot_id = 3;
+                3
+            } else if cmd.ends_with("4") || cmd.contains("sammi") {
+                state.wifi_connected = true;
+                state.wifi_hotspot_id = 4;
+                4
+            } else {
+                state.wifi_connected = true;
+                state.wifi_hotspot_id = 1;
+                1
+            };
+            if choice == 1 {
+                self.add_line("[*] Connecting to 'Jain_Student' (JAIN University FET)...", 0x0038BDF8);
+                self.add_line("[+] 802.1X Enterprise EAP-PEAP: Student Profile Verified!", 0x0034D399);
+                self.add_line("[+] DHCP Lease: IP 172.20.253.58 | Mask 255.255.192.0", 0x0034D399);
+                self.add_line("[+] Gateway: 172.20.192.1 | DNS: 172.20.192.1, 8.8.8.8", 0x0034D399);
+                self.add_line("[OK] SUCCESS: Connected to Jain_Student! Online at 1.2 Gbps link.", 0x002DD4BF);
+            } else if choice == 2 {
+                self.add_line("[*] Connecting to 'Vyshuuu' (Personal Mobile Hotspot)...", 0x0038BDF8);
+                self.add_line("[+] WPA3-SAE Handshake: Password 'sony5117' Verified!", 0x0034D399);
+                self.add_line("[+] DHCP Lease: IP 192.168.43.105 | Mask 255.255.255.0", 0x0034D399);
+                self.add_line("[+] Gateway Router: 192.168.43.1 | DNS: 8.8.8.8, 1.1.1.1", 0x0034D399);
+                self.add_line("[OK] SUCCESS: Connected to Vyshuuu! Hotspot Online at 150 Mbps.", 0x002DD4BF);
+            } else if choice == 3 {
+                self.add_line("[*] Connecting to 'FET - Students' (JAIN FET Campus)...", 0x0038BDF8);
+                self.add_line("[+] 802.1X Authentication: User 25BTRCL294 Authenticated!", 0x0034D399);
+                self.add_line("[+] DHCP Lease: IP 172.20.250.112 | Mask 255.255.192.0", 0x0034D399);
+                self.add_line("[OK] SUCCESS: Connected to FET - Students! Campus Link Online.", 0x002DD4BF);
+            } else {
+                self.add_line("[*] Connecting to 'Sammi's iPhone' Hotspot...", 0x0038BDF8);
+                self.add_line("[+] WPA2-PSK Handshake: Password 'Sammi@123' Verified!", 0x0034D399);
+                self.add_line("[+] DHCP Lease: IP 172.20.10.2 | Mask 255.255.255.240", 0x0034D399);
+                self.add_line("[OK] SUCCESS: Connected to Sammi's iPhone! Hotspot Online.", 0x002DD4BF);
+            }
         } else if cmd == "wifi status" {
             if state.wifi_connected {
+                let (ssid, ip, sig) = match state.wifi_hotspot_id {
+                    2 => ("SSID   : Vyshuuu (Personal Hotspot - WPA3)", "IPv4   : 192.168.43.105 | Gateway: 192.168.43.1", "Signal : 98% (-42 dBm)  | Link: 150 Mbps"),
+                    3 => ("SSID   : FET - Students (Campus Wi-Fi)", "IPv4   : 172.20.250.112 | Gateway: 172.20.192.1", "Signal : 95% (-45 dBm)  | Link: 866 Mbps"),
+                    4 => ("SSID   : Sammi's iPhone (Hotspot - WPA2)", "IPv4   : 172.20.10.2    | Gateway: 172.20.10.1", "Signal : 90% (-52 dBm)  | Link: 130 Mbps"),
+                    _ => ("SSID   : Jain_Student (JAIN FET Campus Wi-Fi 6)", "IPv4   : 172.20.253.58  | Gateway: 172.20.192.1", "Signal : 99% (-38 dBm)  | Link: 1.2 Gbps"),
+                };
                 self.add_line("Wi-Fi State: CONNECTED & ONLINE", 0x0034D399);
-                self.add_line("SSID       : Vyshnavi_iPhone_5G (Mobile Hotspot)", 0x002DD4BF);
-                self.add_line("IPv4       : 192.168.43.105  | Gateway: 192.168.43.1", 0x00FFFFFF);
-                self.add_line("Signal     : 98% (-42 dBm)   | Security: WPA2-PSK", 0x0094A3B8);
+                self.add_line(ssid, 0x002DD4BF);
+                self.add_line(ip, 0x00FFFFFF);
+                self.add_line(sig, 0x0094A3B8);
             } else {
                 self.add_line("Wi-Fi State: DISCONNECTED. Type 'wifi connect' to connect.", 0x00F87171);
             }
         } else if cmd.starts_with("ping") {
             if state.wifi_connected {
-                self.add_line("PING 8.8.8.8 (Google DNS) with 32 bytes of data:", 0x0038BDF8);
-                self.add_line("Reply from 8.8.8.8: bytes=32 time=14.2ms TTL=118", 0x0034D399);
-                self.add_line("Reply from 8.8.8.8: bytes=32 time=13.9ms TTL=118", 0x0034D399);
-                self.add_line("Reply from 8.8.8.8: bytes=32 time=14.1ms TTL=118", 0x0034D399);
+                self.add_line("PING 8.8.8.8 (Google DNS) via Jain_Student link:", 0x0038BDF8);
+                self.add_line("Reply from 8.8.8.8: bytes=32 time=12.1ms TTL=118", 0x0034D399);
+                self.add_line("Reply from 8.8.8.8: bytes=32 time=11.8ms TTL=118", 0x0034D399);
+                self.add_line("Reply from 8.8.8.8: bytes=32 time=12.4ms TTL=118", 0x0034D399);
                 self.add_line("Packets: Sent = 3, Received = 3, Lost = 0 (0% Loss) [ONLINE]", 0x002DD4BF);
             } else {
                 self.add_line("ping: error: network unreachable! Type 'wifi connect' first.", 0x00EF4444);
             }
         } else if cmd == "ipconfig" || cmd == "ifconfig" {
-            self.add_line("Wireless LAN Adapter Wi-Fi 802.11ax:", 0x0038BDF8);
+            self.add_line("Wireless LAN Adapter Wi-Fi (Intel Wi-Fi 6 AX203):", 0x0038BDF8);
             if state.wifi_connected {
-                self.add_line("   IPv4 Address. . . . . . . . . . . : 192.168.43.105", 0x0034D399);
-                self.add_line("   Subnet Mask . . . . . . . . . . . : 255.255.255.0", 0x00FFFFFF);
-                self.add_line("   Default Gateway . . . . . . . . . : 192.168.43.1", 0x00FFFFFF);
-                self.add_line("   Physical MAC Address. . . . . . . : 08:00:27:B4:9C:2A", 0x0094A3B8);
+                self.add_line("   Connection Suffix . . . . . . . . : eth2.20@domain", 0x0094A3B8);
+                self.add_line("   IPv4 Address. . . . . . . . . . . : 172.20.253.58", 0x0034D399);
+                self.add_line("   Subnet Mask . . . . . . . . . . . : 255.255.192.0", 0x00FFFFFF);
+                self.add_line("   Default Gateway . . . . . . . . . : 172.20.192.1", 0x00FFFFFF);
+                self.add_line("   DNS Servers . . . . . . . . . . . : 172.20.192.1, 8.8.8.8", 0x00FFFFFF);
+                self.add_line("   Physical MAC Address. . . . . . . : B8-F7-75-A5-34-0D", 0x0094A3B8);
             } else {
                 self.add_line("   Media State . . . . . . . . . . . : Media disconnected", 0x0094A3B8);
             }
@@ -1057,6 +1099,39 @@ fn click_at(state: &mut OsState, calc: &mut CalculatorState) -> bool {
         }
     }
 
+    // Check Wi-Fi Center Cards if Wi-Fi Center is open
+    if state.active_app == '2' as u16 {
+        // Top status card (toggle connect/disconnect)
+        if x >= wx + 32 && x <= wx + 32 + 538 && y >= wy + 60 && y <= wy + 60 + 38 {
+            state.wifi_connected = !state.wifi_connected;
+            return true;
+        }
+        // Card 1: Jain_Student
+        if x >= wx + 32 && x <= wx + 32 + 538 && y >= wy + 128 && y <= wy + 128 + 38 {
+            state.wifi_connected = true;
+            state.wifi_hotspot_id = 1;
+            return true;
+        }
+        // Card 2: Vyshuuu
+        if x >= wx + 32 && x <= wx + 32 + 538 && y >= wy + 172 && y <= wy + 172 + 38 {
+            state.wifi_connected = true;
+            state.wifi_hotspot_id = 2;
+            return true;
+        }
+        // Card 3: FET - Students
+        if x >= wx + 32 && x <= wx + 32 + 538 && y >= wy + 216 && y <= wy + 216 + 38 {
+            state.wifi_connected = true;
+            state.wifi_hotspot_id = 3;
+            return true;
+        }
+        // Card 4: Sammi's iPhone
+        if x >= wx + 32 && x <= wx + 32 + 538 && y >= wy + 260 && y <= wy + 260 + 38 {
+            state.wifi_connected = true;
+            state.wifi_hotspot_id = 4;
+            return true;
+        }
+    }
+
     // Check Desktop Icons
     if x >= 26 && x <= 80 {
         if y >= 32 && y <= 86 {
@@ -1269,36 +1344,73 @@ fn render_os(disp: &Display, state: &OsState, term: &TerminalEngine, calc: &Calc
 
             if state.wifi_connected {
                 disp.round_card(wx + 32, wy + 60, 538, 38, 0x00134E4A, 0x002DD4BF);
-                draw_text(disp, wx + 44, wy + 72, "STATUS: CONNECTED TO INTERNET VIA MOBILE HOTSPOT", 0x002DD4BF);
+                let conn_banner = match state.wifi_hotspot_id {
+                    2 => "STATUS: CONNECTED TO 'VYSHUUU' (PERSONAL HOTSPOT)",
+                    3 => "STATUS: CONNECTED TO 'FET - STUDENTS' (CAMPUS WI-FI)",
+                    4 => "STATUS: CONNECTED TO 'SAMMI'S IPHONE' (HOTSPOT)",
+                    _ => "STATUS: CONNECTED TO 'JAIN_STUDENT' (CAMPUS WI-FI 6)",
+                };
+                draw_text(disp, wx + 44, wy + 72, conn_banner, 0x002DD4BF);
             } else {
                 disp.round_card(wx + 32, wy + 60, 538, 38, 0x00450A0A, 0x00F87171);
-                draw_text(disp, wx + 44, wy + 72, "STATUS: WI-FI DISCONNECTED - SELECT A HOTSPOT BELOW", 0x00FCA5A5);
+                draw_text(disp, wx + 44, wy + 72, "STATUS: WI-FI DISCONNECTED - CLICK OR PRESS 1-4 TO CONNECT", 0x00FCA5A5);
             }
 
-            draw_text(disp, wx + 32, wy + 108, "Available Wireless Networks & Hotspots (Press 1-4 to connect):", 0x0038BDF8);
+            draw_text(disp, wx + 32, wy + 108, "Your Laptop Saved Networks & Hotspots (Press 1-4 to connect):", 0x0038BDF8);
 
-            disp.round_card(wx + 32, wy + 128, 538, 38, 0x000F172A, 0x0010B981);
-            draw_text(disp, wx + 44, wy + 136, "[1] Vyshnavi_iPhone_5G (Mobile Hotspot)", 0x00FFFFFF);
-            draw_text(disp, wx + 44, wy + 150, "Signal: 98% [||||] | Security: WPA2-PSK | Channel: 6 (5GHz)", 0x0094A3B8);
-            if state.wifi_connected {
+            // 1. Jain_Student
+            let b1 = if state.wifi_connected && state.wifi_hotspot_id == 1 { 0x0010B981 } else { 0x00334155 };
+            disp.round_card(wx + 32, wy + 128, 538, 38, 0x000F172A, b1);
+            draw_text(disp, wx + 44, wy + 136, "[1] Jain_Student (JAIN University Campus Network)", 0x00FFFFFF);
+            draw_text(disp, wx + 44, wy + 150, "Signal: 99% [||||] | Security: 802.1X Enterprise | Band: 5GHz", 0x0094A3B8);
+            if state.wifi_connected && state.wifi_hotspot_id == 1 {
                 draw_text(disp, wx + 450, wy + 142, "* CONNECTED *", 0x0034D399);
             }
 
-            disp.round_card(wx + 32, wy + 172, 538, 38, 0x000F172A, 0x00334155);
-            draw_text(disp, wx + 44, wy + 180, "[2] Galaxy_Hotspot_Fast (Portable Tether)", 0x00FFFFFF);
-            draw_text(disp, wx + 44, wy + 194, "Signal: 88% [|||.] | Security: WPA2-PSK | Channel: 11 (2.4GHz)", 0x0094A3B8);
+            // 2. Vyshuuu (sony5117)
+            let b2 = if state.wifi_connected && state.wifi_hotspot_id == 2 { 0x0010B981 } else { 0x00334155 };
+            disp.round_card(wx + 32, wy + 172, 538, 38, 0x000F172A, b2);
+            draw_text(disp, wx + 44, wy + 180, "[2] Vyshuuu (Personal Hotspot - Password: sony5117)", 0x00FFFFFF);
+            draw_text(disp, wx + 44, wy + 194, "Signal: 98% [||||] | Security: WPA3-Personal | Band: 5GHz", 0x0094A3B8);
+            if state.wifi_connected && state.wifi_hotspot_id == 2 {
+                draw_text(disp, wx + 450, wy + 186, "* CONNECTED *", 0x0034D399);
+            }
 
-            disp.round_card(wx + 32, wy + 216, 538, 38, 0x000F172A, 0x00334155);
-            draw_text(disp, wx + 44, wy + 224, "[3] JAIN_FET_Campus_WiFi (University Network)", 0x00FFFFFF);
-            draw_text(disp, wx + 44, wy + 238, "Signal: 92% [||||] | Security: 802.1X Enterprise | VLAN: 104", 0x0094A3B8);
+            // 3. FET - Students
+            let b3 = if state.wifi_connected && state.wifi_hotspot_id == 3 { 0x0010B981 } else { 0x00334155 };
+            disp.round_card(wx + 32, wy + 216, 538, 38, 0x000F172A, b3);
+            draw_text(disp, wx + 44, wy + 224, "[3] FET - Students (JAIN FET Campus Network)", 0x00FFFFFF);
+            draw_text(disp, wx + 44, wy + 238, "Signal: 95% [||||] | Security: 802.1X Enterprise | VLAN: 104", 0x0094A3B8);
+            if state.wifi_connected && state.wifi_hotspot_id == 3 {
+                draw_text(disp, wx + 450, wy + 230, "* CONNECTED *", 0x0034D399);
+            }
 
-            disp.round_card(wx + 32, wy + 266, 538, 126, 0x000F172A, 0x000D9488);
+            // 4. Sammi's iPhone (Sammi@123)
+            let b4 = if state.wifi_connected && state.wifi_hotspot_id == 4 { 0x0010B981 } else { 0x00334155 };
+            disp.round_card(wx + 32, wy + 260, 538, 38, 0x000F172A, b4);
+            draw_text(disp, wx + 44, wy + 268, "[4] Sammi's iPhone (Hotspot - Password: Sammi@123)", 0x00FFFFFF);
+            draw_text(disp, wx + 44, wy + 282, "Signal: 90% [|||.] | Security: WPA2-PSK | Band: 2.4GHz", 0x0094A3B8);
+            if state.wifi_connected && state.wifi_hotspot_id == 4 {
+                draw_text(disp, wx + 450, wy + 274, "* CONNECTED *", 0x0034D399);
+            }
+
+            // Bottom Diagnostics Card
+            disp.round_card(wx + 32, wy + 306, 538, 92, 0x000F172A, 0x000D9488);
             if state.wifi_connected {
-                draw_text(disp, wx + 44, wy + 280, "DHCP Assigned IP : 192.168.43.105 (Mobile Hotspot Network)", 0x002DD4BF);
-                draw_text(disp, wx + 44, wy + 300, "Default Gateway  : 192.168.43.1   | Subnet: 255.255.255.0", 0x00FFFFFF);
-                draw_text(disp, wx + 44, wy + 320, "DNS Server       : 8.8.8.8, 1.1.1.1 (Google / Cloudflare)", 0x0094A3B8);
-                draw_text(disp, wx + 44, wy + 340, "Hardware Adapter : Intel Wi-Fi Dual Band (MAC: 08:00:27:B4:9C:2A)", 0x0094A3B8);
-                draw_text(disp, wx + 44, wy + 365, "Press [Esc] to close window | Press [T] for Terminal", 0x00FCD34D);
+                let ip_str = if state.wifi_hotspot_id == 2 {
+                    "IPv4: 192.168.43.105 | Mask: 255.255.255.0 | Gateway: 192.168.43.1"
+                } else if state.wifi_hotspot_id == 4 {
+                    "IPv4: 172.20.10.2    | Mask: 255.255.255.240 | Gateway: 172.20.10.1"
+                } else {
+                    "IPv4: 172.20.253.58  | Mask: 255.255.192.0 | Gateway: 172.20.192.1"
+                };
+                draw_text(disp, wx + 44, wy + 318, ip_str, 0x002DD4BF);
+                draw_text(disp, wx + 44, wy + 338, "Hardware Adapter: Intel(R) Wi-Fi 6 AX203 (B8:F7:75:A5:34:0D)", 0x00FFFFFF);
+                draw_text(disp, wx + 44, wy + 358, "DNS: 172.20.192.1, 8.8.8.8 | Link Speed: 1.2 Gbps (Wi-Fi 6)", 0x0094A3B8);
+                draw_text(disp, wx + 44, wy + 378, "Press 1-4 to switch network | Press [5] to disconnect | [Esc] close", 0x00FCD34D);
+            } else {
+                draw_text(disp, wx + 44, wy + 338, "Adapter: Intel(R) Wi-Fi 6 AX203 | Status: Radio Enabled, Disconnected", 0x00F87171);
+                draw_text(disp, wx + 44, wy + 360, "Click any network above or press 1-4 to connect instantly", 0x00FFFFFF);
             }
         }
 
@@ -1458,11 +1570,17 @@ fn render_os(disp: &Display, state: &OsState, term: &TerminalEngine, calc: &Calc
 
     // System Tray
     if state.wifi_connected {
-        disp.round_card(disp.width - 330, ty + 8, 140, 32, 0x00134E4A, 0x002DD4BF);
-        draw_text(disp, disp.width - 322, ty + 18, "Hotspot: Online", 0x002DD4BF);
+        let name = match state.wifi_hotspot_id {
+            2 => "Wi-Fi: Vyshuuu",
+            3 => "Wi-Fi: FET-Student",
+            4 => "Wi-Fi: Sammi iPhone",
+            _ => "Wi-Fi: Jain_Student",
+        };
+        disp.round_card(disp.width - 340, ty + 8, 150, 32, 0x00134E4A, 0x002DD4BF);
+        draw_text(disp, disp.width - 334, ty + 18, name, 0x002DD4BF);
     } else {
-        disp.round_card(disp.width - 330, ty + 8, 140, 32, 0x00334155, 0x0064748B);
-        draw_text(disp, disp.width - 322, ty + 18, "Wi-Fi: Standby", 0x0094A3B8);
+        disp.round_card(disp.width - 340, ty + 8, 150, 32, 0x00334155, 0x0064748B);
+        draw_text(disp, disp.width - 334, ty + 18, "Wi-Fi: Standby", 0x0094A3B8);
     }
 
     disp.fill(disp.width - 180, ty + 26, 3, 6, 0x00FFFFFF);
@@ -1937,8 +2055,8 @@ pub extern "efiapi" fn efi_main(
                             screen_needs_render = true;
                         }
                     }
-                    // 6. When WI-FI CENTER is ACTIVE, 1-4 selects/toggles hotspot!
-                    else if state.active_app == '2' as u16 && (key.unicode_char >= '1' as u16 && key.unicode_char <= '4' as u16) {
+                    // 6. When WI-FI CENTER is ACTIVE, 1-4 selects network, 5 disconnects!
+                    else if state.active_app == '2' as u16 && (key.unicode_char >= '1' as u16 && key.unicode_char <= '5' as u16) {
                         if key.unicode_char == '1' as u16 {
                             state.wifi_connected = true;
                             state.wifi_hotspot_id = 1;
@@ -1949,6 +2067,9 @@ pub extern "efiapi" fn efi_main(
                             state.wifi_connected = true;
                             state.wifi_hotspot_id = 3;
                         } else if key.unicode_char == '4' as u16 {
+                            state.wifi_connected = true;
+                            state.wifi_hotspot_id = 4;
+                        } else if key.unicode_char == '5' as u16 {
                             state.wifi_connected = false;
                             state.wifi_hotspot_id = 0;
                         }
