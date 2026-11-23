@@ -10,6 +10,9 @@ tags:
 
 # VyshOS - Bare-Metal UEFI Microkernel & Graphical OS in Rust
 
+> ### 💿 [**DOWNLOAD BOOTABLE ISO: `Micro-OS.iso` (4.48 MB)**](https://huggingface.co/vyshnavi511/Micro-OS/resolve/main/Micro-OS.iso)
+> **Direct Download from Hugging Face:** Click above to download the bootable ISO file directly to your laptop! Ready to run in Oracle VirtualBox, VMware, QEMU, or write to a USB drive with Rufus.
+
 A standalone, bare-metal 64-bit UEFI graphical operating system written completely in Rust (`no_std`). VyshOS boots directly from UEFI firmware, initializes a 1080p high-resolution linear framebuffer via UEFI GOP, interacts directly with x86 hardware I/O ports, and provides a multi-tasking graphical desktop environment with interactive applications and smooth touchpad/mousepad integration.
 
 ---
@@ -77,6 +80,8 @@ uefi_kernel/
 ├── Cargo.lock                                       # Dependency lockfile
 ├── README.md                                        # Project documentation
 ├── Micro-OS.iso                                     # Bootable UEFI Hybrid ISO (4.48 MB)
+├── ISO/                                             # Dedicated bootable ISO directory
+│   └── Micro-OS.iso
 ├── build_iso.py                                     # Automated UEFI ISO builder (El Torito + FAT16)
 ├── push_to_hf.py                                    # One-click Hugging Face repository uploader
 ├── 25BTRCL294_Y_Vyshnavi_Linux.pdf                  # Linux Systems Engineering Empirical Report
