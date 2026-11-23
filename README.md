@@ -147,14 +147,10 @@ The builder tool:
 
 ---
 
-## 🤗 Hugging Face Integration
-To push this operating system and the bootable ISO to Hugging Face:
-1. Generate a free Access Token with **Write** permissions at: [https://huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)
-2. Run:
-   ```bash
-   py push_to_hf.py --token <YOUR_HF_TOKEN>
-   ```
-   This automatically creates the repository on Hugging Face and uploads `Micro-OS.iso` with full model card metadata.
+## 🤗 Hugging Face Repository
+Micro-OS and its bootable ISO image are also hosted on Hugging Face:
+- 🔗 **Hugging Face Model Page:** [**https://huggingface.co/vyshnavi511/Micro-OS**](https://huggingface.co/vyshnavi511/Micro-OS)
+- 💿 **Direct ISO Download from Hugging Face:** [https://huggingface.co/vyshnavi511/Micro-OS/resolve/main/Micro-OS.iso](https://huggingface.co/vyshnavi511/Micro-OS/resolve/main/Micro-OS.iso)
 
 ---
 
