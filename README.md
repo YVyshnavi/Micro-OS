@@ -60,6 +60,7 @@ uefi_kernel/
 ├── Cargo.lock               # Dependency lockfile
 ├── README.md                # Project documentation
 ├── docs/                    # Research papers and Continuous Assessment reports (PDF)
+│   ├── 25BTRCL294_Y_VYSHNAVI_Lab_Report.pdf
 │   ├── CA5_Linux_Systems_Engineering_Report_25BTRCL294.pdf
 │   ├── CA4_OS_Research_Activity_Paper_25BTRCL294.pdf
 │   └── OS_Continuous_Assessment_Report_25BTRCL294.pdf
@@ -73,6 +74,8 @@ uefi_kernel/
 
 ## 📚 Academic Research Papers & Continuous Assessment Reports
 The theoretical foundation and scheduling algorithms in this microkernel are documented in the author's research reports included in the repository:
+- 📄 [**OS Laboratory Continuous Assessment Report (11.8 MB)**](docs/25BTRCL294_Y_VYSHNAVI_Lab_Report.pdf)  
+  *Comprehensive Operating Systems Laboratory Report and Practical Implementations* (JAIN FET Campus - Yeddula Vyshnavi, 25BTRCL294).
 - 📄 [**CA-5 Linux Systems Engineering Challenge Report (27 pages)**](docs/CA5_Linux_Systems_Engineering_Report_25BTRCL294.pdf)  
   *Investigating the Impact of Workload Characteristics on CPU Scheduling Policy Selection: A Linux Systems Engineering Empirical Study* (JAIN FET Campus).
 - 📄 [**CA-4 OS Research Activity Paper (9 pages)**](docs/CA4_OS_Research_Activity_Paper_25BTRCL294.pdf)  
