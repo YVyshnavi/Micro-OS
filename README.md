@@ -59,11 +59,26 @@ uefi_kernel/
 ├── Cargo.toml               # Rust package manifest
 ├── Cargo.lock               # Dependency lockfile
 ├── README.md                # Project documentation
+├── docs/                    # Research papers and Continuous Assessment reports (PDF)
+│   ├── CA5_Linux_Systems_Engineering_Report_25BTRCL294.pdf
+│   ├── CA4_OS_Research_Activity_Paper_25BTRCL294.pdf
+│   └── OS_Continuous_Assessment_Report_25BTRCL294.pdf
 └── src/
     ├── main.rs              # Complete microkernel, GOP graphics, drivers, & apps
     └── bin/
         └── builder.rs       # Disk builder: creates FAT16 EFI partition & VDI image
 ```
+
+---
+
+## 📚 Academic Research Papers & Continuous Assessment Reports
+The theoretical foundation and scheduling algorithms in this microkernel are documented in the author's research reports included in the repository:
+- 📄 [**CA-5 Linux Systems Engineering Challenge Report (27 pages)**](docs/CA5_Linux_Systems_Engineering_Report_25BTRCL294.pdf)  
+  *Investigating the Impact of Workload Characteristics on CPU Scheduling Policy Selection: A Linux Systems Engineering Empirical Study* (JAIN FET Campus).
+- 📄 [**CA-4 OS Research Activity Paper (9 pages)**](docs/CA4_OS_Research_Activity_Paper_25BTRCL294.pdf)  
+  *Workload-Aware Scheduling: Can Workload Characteristics Be Used to Select a More Suitable CPU Scheduling Strategy?*
+- 📄 [**OS Continuous Assessment Extended Report (13 pages)**](docs/OS_Continuous_Assessment_Report_25BTRCL294.pdf)  
+  *Empirical CPU Scheduling Simulation, Policy Selection, and Workload Characterization.*
 
 ---
 
