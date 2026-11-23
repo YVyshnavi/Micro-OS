@@ -55,33 +55,38 @@ A standalone, bare-metal 64-bit UEFI graphical operating system written complete
 
 ```
 uefi_kernel/
-├── .gitignore               # Ignores build artifacts and disk images
-├── Cargo.toml               # Rust package manifest
-├── Cargo.lock               # Dependency lockfile
-├── README.md                # Project documentation
-├── docs/                    # Research papers and Continuous Assessment reports (PDF)
-│   ├── 25BTRCL294_Y_VYSHNAVI_Lab_Report.pdf
-│   ├── CA5_Linux_Systems_Engineering_Report_25BTRCL294.pdf
-│   ├── CA4_OS_Research_Activity_Paper_25BTRCL294.pdf
-│   └── OS_Continuous_Assessment_Report_25BTRCL294.pdf
+├── .gitignore                                       # Ignores build artifacts and disk images
+├── Cargo.toml                                       # Rust package manifest
+├── Cargo.lock                                       # Dependency lockfile
+├── README.md                                        # Project documentation
+├── 25BTRCL294_Y_Vyshnavi_Linux.pdf                  # Linux Systems Engineering Empirical Report
+├── 25BTRCL294_Y.VYSHNAVI_investigation_report.pdf   # OS Investigation & CPU Scheduling Research
+├── 25BTRCL294_Y.VYSHNAVI_research_writeup.pdf       # Workload-Aware Scheduling Research Paper
+├── 25BTRCL294_Y.VYSHNAVI_lab report.pdf             # Comprehensive OS Laboratory Report
+├── docs/                                            # Academic reports folder
+│   ├── 25BTRCL294_Y_Vyshnavi_Linux.pdf
+│   ├── 25BTRCL294_Y.VYSHNAVI_investigation_report.pdf
+│   ├── 25BTRCL294_Y.VYSHNAVI_research_writeup.pdf
+│   └── 25BTRCL294_Y.VYSHNAVI_lab report.pdf
 └── src/
-    ├── main.rs              # Complete microkernel, GOP graphics, drivers, & apps
+    ├── main.rs                                      # Complete microkernel, GOP graphics, drivers, & apps
     └── bin/
-        └── builder.rs       # Disk builder: creates FAT16 EFI partition & VDI image
+        └── builder.rs                               # Disk builder: creates FAT16 EFI partition & VDI image
 ```
 
 ---
 
 ## 📚 Academic Research Papers & Continuous Assessment Reports
-The theoretical foundation and scheduling algorithms in this microkernel are documented in the author's research reports included in the repository:
-- 📄 [**OS Laboratory Continuous Assessment Report (11.8 MB)**](docs/25BTRCL294_Y_VYSHNAVI_Lab_Report.pdf)  
-  *Comprehensive Operating Systems Laboratory Report and Practical Implementations* (JAIN FET Campus - Yeddula Vyshnavi, 25BTRCL294).
-- 📄 [**CA-5 Linux Systems Engineering Challenge Report (27 pages)**](docs/CA5_Linux_Systems_Engineering_Report_25BTRCL294.pdf)  
-  *Investigating the Impact of Workload Characteristics on CPU Scheduling Policy Selection: A Linux Systems Engineering Empirical Study* (JAIN FET Campus).
-- 📄 [**CA-4 OS Research Activity Paper (9 pages)**](docs/CA4_OS_Research_Activity_Paper_25BTRCL294.pdf)  
-  *Workload-Aware Scheduling: Can Workload Characteristics Be Used to Select a More Suitable CPU Scheduling Strategy?*
-- 📄 [**OS Continuous Assessment Extended Report (13 pages)**](docs/OS_Continuous_Assessment_Report_25BTRCL294.pdf)  
-  *Empirical CPU Scheduling Simulation, Policy Selection, and Workload Characterization.*
+All reports submitted by the author (**Yeddula Vyshnavi**, USN: **25BTRCL294**, Section E, JAIN FET Campus) are included directly in the repository:
+
+- 📄 [**25BTRCL294_Y_Vyshnavi_Linux.pdf**](25BTRCL294_Y_Vyshnavi_Linux.pdf)  
+  *Investigating the Impact of Workload Characteristics on CPU Scheduling Policy Selection: A Linux Systems Engineering Empirical Study* (CA-5 Report, 27 pages).
+- 📄 [**25BTRCL294_Y.VYSHNAVI_investigation_report.pdf**](25BTRCL294_Y.VYSHNAVI_investigation_report.pdf)  
+  *Workload-Aware Scheduling: Can Workload Characteristics Be Used to Select a More Suitable CPU Scheduling Strategy?* (CA-4 Investigation Report).
+- 📄 [**25BTRCL294_Y.VYSHNAVI_research_writeup.pdf**](25BTRCL294_Y.VYSHNAVI_research_writeup.pdf)  
+  *OS Continuous Assessment Extended Research Writeup: Empirical CPU Scheduling Simulation & Policy Selection.*
+- 📄 [**25BTRCL294_Y.VYSHNAVI_lab report.pdf**](<25BTRCL294_Y.VYSHNAVI_lab report.pdf>)  
+  *Comprehensive Operating Systems Laboratory Report and Practical Implementations (12.4 MB).*
 
 ---
 
