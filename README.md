@@ -1,3 +1,13 @@
+---
+license: mit
+tags:
+- operating-system
+- uefi
+- rust
+- bare-metal
+- microkernel
+---
+
 # VyshOS - Bare-Metal UEFI Microkernel & Graphical OS in Rust
 
 A standalone, bare-metal 64-bit UEFI graphical operating system written completely in Rust (`no_std`). VyshOS boots directly from UEFI firmware, initializes a 1080p high-resolution linear framebuffer via UEFI GOP, interacts directly with x86 hardware I/O ports, and provides a multi-tasking graphical desktop environment with interactive applications and smooth touchpad/mousepad integration.
