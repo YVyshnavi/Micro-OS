@@ -1,0 +1,6 @@
+# Rust build target
+/target/
+
+# Generated disk images
+*.img
+*.vdi
