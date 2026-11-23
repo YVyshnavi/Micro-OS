@@ -51,6 +51,13 @@ A standalone, bare-metal 64-bit UEFI graphical operating system written complete
 
 ---
 
+## 💿 Bootable ISO & Virtual Machine Images
+You can download the bootable image directly from this repository to test or install Micro-OS:
+- 💿 [**Download Bootable UEFI ISO (`Micro-OS.iso`)**](Micro-OS.iso) *(4.48 MB - Bootable on VirtualBox, VMware, QEMU, Rufus, or physical UEFI PCs)*
+- 💻 **VirtualBox VDI:** Built automatically using `cargo run --bin builder` to output `kernel.vdi`.
+
+---
+
 ## 📁 Repository Structure
 
 ```
@@ -59,6 +66,9 @@ uefi_kernel/
 ├── Cargo.toml                                       # Rust package manifest
 ├── Cargo.lock                                       # Dependency lockfile
 ├── README.md                                        # Project documentation
+├── Micro-OS.iso                                     # Bootable UEFI Hybrid ISO (4.48 MB)
+├── build_iso.py                                     # Automated UEFI ISO builder (El Torito + FAT16)
+├── push_to_hf.py                                    # One-click Hugging Face repository uploader
 ├── 25BTRCL294_Y_Vyshnavi_Linux.pdf                  # Linux Systems Engineering Empirical Report
 ├── 25BTRCL294_Y.VYSHNAVI_investigation_report.pdf   # OS Investigation & CPU Scheduling Research
 ├── 25BTRCL294_Y.VYSHNAVI_research_writeup.pdf       # Workload-Aware Scheduling Research Paper
@@ -71,7 +81,7 @@ uefi_kernel/
 └── src/
     ├── main.rs                                      # Complete microkernel, GOP graphics, drivers, & apps
     └── bin/
-        └── builder.rs                               # Disk builder: creates FAT16 EFI partition & VDI image
+        └── builder.rs                               # Disk builder: creates FAT16 EFI partition, VDI image, & ISO
 ```
 
 ---
@@ -87,6 +97,8 @@ All reports submitted by the author (**Yeddula Vyshnavi**, USN: **25BTRCL294**, 
   *OS Continuous Assessment Extended Research Writeup: Empirical CPU Scheduling Simulation & Policy Selection.*
 - 📄 [**25BTRCL294_Y.VYSHNAVI_lab report.pdf**](<25BTRCL294_Y.VYSHNAVI_lab report.pdf>)  
   *Comprehensive Operating Systems Laboratory Report and Practical Implementations (12.4 MB).*
+- 📄 [**25BTRCL294_Yeddula_Vyshnavi Design_Debugging.pdf**](<25BTRCL294_Yeddula_Vyshnavi Design_Debugging.pdf>)  
+  *Continuous Assessment CA-3: Design & Debugging Analysis Report (409 KB).*
 
 ---
 
@@ -116,17 +128,33 @@ The builder tool:
 3. Copies `uefi_kernel.efi` to `\EFI\BOOT\BOOTX64.EFI`.
 4. Automatically calls `VBoxManage convertfromraw` to produce `kernel.vdi`.
 
-### Step 3: Run in Oracle VirtualBox
+### Step 3: Run in Oracle VirtualBox (Using ISO or VDI)
+#### Option A: Booting from `Micro-OS.iso`
 1. Open **Oracle VM VirtualBox** and create a new VM:
    - **Type:** Other
    - **Version:** Other/Unknown (64-bit)
    - **RAM:** 512 MB or 1024 MB
 2. In **Settings -> System**:
    - Check **Enable EFI (special OSes only)**
-   - Set **Pointing Device:** PS/2 Mouse
+   - Set **Pointing Device:** PS/2 Mouse (or USB Tablet)
 3. In **Settings -> Storage**:
-   - Attach `kernel.vdi` to the SATA controller.
-4. Click **Start** to launch VyshOS!
+   - Attach `Micro-OS.iso` to the Optical Drive (SATA / IDE Controller).
+4. Click **Start** to boot Micro-OS directly from the ISO!
+
+#### Option B: Booting from `kernel.vdi`
+1. Follow the steps above, but attach `kernel.vdi` to the SATA Hard Disk controller.
+2. Click **Start**.
+
+---
+
+## 🤗 Hugging Face Integration
+To push this operating system and the bootable ISO to Hugging Face:
+1. Generate a free Access Token with **Write** permissions at: [https://huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)
+2. Run:
+   ```bash
+   py push_to_hf.py --token <YOUR_HF_TOKEN>
+   ```
+   This automatically creates the repository on Hugging Face and uploads `Micro-OS.iso` with full model card metadata.
 
 ---
 

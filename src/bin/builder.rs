@@ -151,4 +151,8 @@ fn main() {
             println!("⚠️ Warning: VBoxManage conversion had an issue. Check if VirtualBox is installed.");
         }
     }
+
+    // 9. Call build_iso.py to automatically produce Micro-OS.iso!
+    println!("\n💿 Automatically building bootable UEFI ISO (Micro-OS.iso)...");
+    let _ = Command::new("py").arg("build_iso.py").status();
 }
